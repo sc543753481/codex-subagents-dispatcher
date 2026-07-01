@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "General-purpose workflow guidance for dispatching focused Codex subagents on parallelizable work.",
   "author": {
-    "name": "subagent-dispatcher contributors",
+    "name": "Chao Shen",
     "url": "https://github.com/sc543753481/codex-subagents-dispatcher"
   },
   "homepage": "https://github.com/sc543753481/codex-subagents-dispatcher",
@@ -21,7 +21,7 @@
     "displayName": "Subagent Dispatcher",
     "shortDescription": "Dispatch focused subagents for parallel work.",
     "longDescription": "Subagent Dispatcher helps Codex decide when to split coding and non-coding work into focused subagents, assign clear scopes, and synthesize the results safely.",
-    "developerName": "subagent-dispatcher contributors",
+    "developerName": "Chao Shen",
     "category": "Productivity",
     "websiteURL": "https://github.com/sc543753481/codex-subagents-dispatcher",
     "brandColor": "#2F6FED",

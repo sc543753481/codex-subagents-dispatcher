@@ -6,20 +6,55 @@ Make Codex actually consider subagents when work can be split.
 
 ## Install
 
-Recommended: install from the Codex app UI.
+Recommended for most users: install with the Codex CLI one-line installer. It avoids the most common UI mistake: typing text into the sparse path field.
+
+Requirements:
+
+- Codex CLI installed.
+- Signed in to Codex.
+
+PowerShell, recommended with global `AGENTS.md` authorization:
+
+```powershell
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/sc543753481/codex-subagents-dispatcher/main/scripts/install.ps1))) -Ref main -Authorize
+```
+
+macOS/Linux, recommended with global `AGENTS.md` authorization:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/sc543753481/codex-subagents-dispatcher/main/scripts/install.sh | env REF=main AUTHORIZE=1 sh
+```
+
+The authorization step adds the standing instruction that lets Codex consider the `subagent-dispatcher` workflow automatically when work can be split.
+
+After installing, open a new Codex thread so the plugin skill is loaded. To verify the install, run:
+
+```powershell
+codex plugin list
+```
+
+You should see `subagent-dispatcher@codex-subagents-dispatcher` marked as installed and enabled.
+
+### Codex App UI
+
+You can also add the marketplace from the Codex app UI.
 
 1. Open **Plugins** in the Codex app.
 2. Choose **Add plugin marketplace**.
-3. Fill in:
+3. Fill in only these fields:
 
-```text
-Source: sc543753481/codex-subagents-dispatcher
-Git ref: main
-Sparse path: leave empty
-```
+| Field | Value |
+| --- | --- |
+| Source | `https://github.com/sc543753481/codex-subagents-dispatcher.git` |
+| Git ref | `main` |
 
-4. Open the new marketplace and install **Subagent Dispatcher**.
-5. Open a new Codex thread so the plugin skill is loaded into the session.
+Important: do not type `leave empty`, `plugins/subagent-dispatcher`, or any other text into **Sparse path**. The field must be empty. This repository is a marketplace repo, and Codex needs the root `.agents/plugins/marketplace.json` file plus the plugin folder it points to.
+
+If you see `marketplace root does not contain a supported manifest`, the sparse path was probably set incorrectly. Retry with **Sparse path** completely empty, or use the one-line installer above.
+
+4. Open the new marketplace, **Codex Subagents Dispatcher**.
+5. Install **Subagent Dispatcher**.
+6. Open a new Codex thread so the plugin skill is loaded into the session.
 
 Codex app deep links can open the install flow only after Codex already knows the marketplace:
 
@@ -27,37 +62,28 @@ Codex app deep links can open the install flow only after Codex already knows th
 codex://plugins/install/subagent-dispatcher?marketplace=codex-subagents-dispatcher
 ```
 
-For a first-time public install, add the marketplace in the app first, or use the installer or CLI commands below.
+For a first-time public install, add the marketplace with the one-line installer, the UI flow above, or the manual CLI commands below.
 
-### CLI Install
+### Manual CLI
 
-Requires the Codex CLI to be installed and signed in.
-
-PowerShell one-line install:
+Install directly from GitHub without cloning:
 
 ```powershell
-irm https://raw.githubusercontent.com/sc543753481/codex-subagents-dispatcher/main/scripts/install.ps1 | iex
+codex plugin marketplace add sc543753481/codex-subagents-dispatcher --ref main
+codex plugin add subagent-dispatcher@codex-subagents-dispatcher
 ```
 
-Recommended PowerShell install with global `AGENTS.md` authorization:
+If you want to install without writing `AGENTS.md` automatically, use:
 
 ```powershell
-& ([scriptblock]::Create((irm https://raw.githubusercontent.com/sc543753481/codex-subagents-dispatcher/main/scripts/install.ps1))) -Authorize
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/sc543753481/codex-subagents-dispatcher/main/scripts/install.ps1))) -Ref main
 ```
-
-macOS/Linux:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/sc543753481/codex-subagents-dispatcher/main/scripts/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/sc543753481/codex-subagents-dispatcher/main/scripts/install.sh | env REF=main sh
 ```
 
-Recommended macOS/Linux install with global `AGENTS.md` authorization:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/sc543753481/codex-subagents-dispatcher/main/scripts/install.sh | env AUTHORIZE=1 sh
-```
-
-To preview the commands before running them:
+To preview the installer commands before running them:
 
 ```powershell
 & ([scriptblock]::Create((irm https://raw.githubusercontent.com/sc543753481/codex-subagents-dispatcher/main/scripts/install.ps1))) -DryRun
@@ -65,6 +91,35 @@ To preview the commands before running them:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/sc543753481/codex-subagents-dispatcher/main/scripts/install.sh | env DRY_RUN=1 sh
+```
+
+### Local Development Install
+
+From this repository root, run the local installer:
+
+PowerShell:
+
+```powershell
+.\scripts\install.ps1 -Source . -Authorize
+```
+
+macOS/Linux:
+
+```bash
+env AUTHORIZE=1 sh ./scripts/install.sh .
+```
+
+The installer runs the official Codex CLI commands for you:
+
+```powershell
+codex plugin marketplace add .
+codex plugin add subagent-dispatcher@codex-subagents-dispatcher
+```
+
+To verify a local install from a cloned checkout:
+
+```powershell
+.\scripts\verify-install.ps1
 ```
 
 ## Overview
@@ -124,48 +179,6 @@ This plugin guides Codex toward a better operating mode for parallel work: main 
     ├── install.ps1
     ├── install.sh
     └── verify-install.ps1
-```
-
-## Installation
-
-From this repository root, run the local installer:
-
-PowerShell:
-
-```powershell
-.\scripts\install.ps1
-```
-
-macOS/Linux:
-
-```bash
-sh ./scripts/install.sh
-```
-
-The installer runs the official Codex CLI commands for you:
-
-```powershell
-codex plugin marketplace add .
-codex plugin add subagent-dispatcher@codex-subagents-dispatcher
-```
-
-If your Codex build discovers local marketplace files differently, install from the marketplace name shown by:
-
-```powershell
-codex plugin list
-```
-
-You can also install directly from GitHub without cloning:
-
-```powershell
-codex plugin marketplace add sc543753481/codex-subagents-dispatcher --ref main
-codex plugin add subagent-dispatcher@codex-subagents-dispatcher
-```
-
-To verify a local install after running the installer:
-
-```powershell
-.\scripts\verify-install.ps1
 ```
 
 ## AGENTS.md Authorization

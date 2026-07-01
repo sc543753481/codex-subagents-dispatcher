@@ -6,20 +6,55 @@
 
 ## 安装
 
-优先推荐：从 Codex app 图形界面安装。
+大多数用户推荐使用 Codex CLI 一行安装。这样可以避开最常见的 UI 误填：把说明文字填进 sparse path 字段。
+
+要求：
+
+- 已安装 Codex CLI。
+- 已登录 Codex。
+
+PowerShell 推荐安装方式，会同时写入全局 `AGENTS.md` 授权指令：
+
+```powershell
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/sc543753481/codex-subagents-dispatcher/main/scripts/install.ps1))) -Ref main -Authorize
+```
+
+macOS/Linux 推荐安装方式，会同时写入全局 `AGENTS.md` 授权指令：
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/sc543753481/codex-subagents-dispatcher/main/scripts/install.sh | env REF=main AUTHORIZE=1 sh
+```
+
+授权步骤会加入常驻指令，让 Codex 在任务可以拆分时自动考虑 `subagent-dispatcher` 工作流。
+
+安装后打开一个新的 Codex 线程，让插件技能加载到会话中。可以用下面命令验证安装：
+
+```powershell
+codex plugin list
+```
+
+你应该能看到 `subagent-dispatcher@codex-subagents-dispatcher` 显示为 installed 和 enabled。
+
+### Codex App 图形界面
+
+也可以从 Codex app 图形界面添加插件市场。
 
 1. 打开 Codex app 的 **Plugins**。
 2. 选择 **Add plugin marketplace**。
-3. 填写：
+3. 只填写下面这些字段：
 
-```text
-Source: sc543753481/codex-subagents-dispatcher
-Git ref: main
-Sparse path: leave empty
-```
+| 字段 | 填写内容 |
+| --- | --- |
+| Source | `https://github.com/sc543753481/codex-subagents-dispatcher.git` |
+| Git ref | `main` |
 
-4. 打开新增的 marketplace，安装 **Subagent Dispatcher**。
-5. 安装后打开一个新的 Codex 线程，让插件技能加载到会话中。
+重要：不要在 **Sparse path** 里输入 `leave empty`、`plugins/subagent-dispatcher` 或任何其他文字。这个字段必须保持空白。本仓库是 marketplace 仓库，Codex 需要读取根目录的 `.agents/plugins/marketplace.json`，以及该文件指向的插件目录。
+
+如果你看到 `marketplace root does not contain a supported manifest`，通常就是 sparse path 填错了。请重新添加 marketplace，并让 **Sparse path** 完全保持空白；也可以直接使用上面的一行安装脚本。
+
+4. 打开刚添加的插件市场 **Codex Subagents Dispatcher**。
+5. 安装 **Subagent Dispatcher**。
+6. 安装后打开一个新的 Codex 线程，让插件技能加载到会话中。
 
 Codex app 深链接只能在 Codex 已经知道该插件市场之后打开安装流程：
 
@@ -27,37 +62,28 @@ Codex app 深链接只能在 Codex 已经知道该插件市场之后打开安装
 codex://plugins/install/subagent-dispatcher?marketplace=codex-subagents-dispatcher
 ```
 
-首次公开安装，请先用上面的图形界面添加 marketplace；也可以使用安装脚本，或使用下面的 Codex CLI 命令。
+首次公开安装，请使用一行安装脚本、上面的图形界面流程，或下面的手动 CLI 命令。
 
-### CLI 安装
+### 手动 CLI
 
-需要先安装 Codex CLI 并完成登录。
-
-PowerShell 一行安装：
+不克隆仓库，直接从 GitHub 安装：
 
 ```powershell
-irm https://raw.githubusercontent.com/sc543753481/codex-subagents-dispatcher/main/scripts/install.ps1 | iex
+codex plugin marketplace add sc543753481/codex-subagents-dispatcher --ref main
+codex plugin add subagent-dispatcher@codex-subagents-dispatcher
 ```
 
-推荐的 PowerShell 安装方式，会同时写入全局 `AGENTS.md` 授权指令：
+如果你不想让安装脚本自动写入 `AGENTS.md`，可以使用：
 
 ```powershell
-& ([scriptblock]::Create((irm https://raw.githubusercontent.com/sc543753481/codex-subagents-dispatcher/main/scripts/install.ps1))) -Authorize
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/sc543753481/codex-subagents-dispatcher/main/scripts/install.ps1))) -Ref main
 ```
-
-macOS/Linux:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/sc543753481/codex-subagents-dispatcher/main/scripts/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/sc543753481/codex-subagents-dispatcher/main/scripts/install.sh | env REF=main sh
 ```
 
-推荐的 macOS/Linux 安装方式，会同时写入全局 `AGENTS.md` 授权指令：
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/sc543753481/codex-subagents-dispatcher/main/scripts/install.sh | env AUTHORIZE=1 sh
-```
-
-执行前想先预览命令：
+执行前想先预览安装脚本会运行哪些命令：
 
 ```powershell
 & ([scriptblock]::Create((irm https://raw.githubusercontent.com/sc543753481/codex-subagents-dispatcher/main/scripts/install.ps1))) -DryRun
@@ -65,6 +91,35 @@ curl -fsSL https://raw.githubusercontent.com/sc543753481/codex-subagents-dispatc
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/sc543753481/codex-subagents-dispatcher/main/scripts/install.sh | env DRY_RUN=1 sh
+```
+
+### 本地开发安装
+
+在本仓库根目录中，运行本地安装脚本：
+
+PowerShell:
+
+```powershell
+.\scripts\install.ps1 -Source . -Authorize
+```
+
+macOS/Linux:
+
+```bash
+env AUTHORIZE=1 sh ./scripts/install.sh .
+```
+
+安装脚本会替你运行下面这些官方 Codex CLI 命令：
+
+```powershell
+codex plugin marketplace add .
+codex plugin add subagent-dispatcher@codex-subagents-dispatcher
+```
+
+从克隆仓库中完成本地安装后，可以用下面命令验证：
+
+```powershell
+.\scripts\verify-install.ps1
 ```
 
 ## 概览
@@ -124,48 +179,6 @@ curl -fsSL https://raw.githubusercontent.com/sc543753481/codex-subagents-dispatc
     ├── install.ps1
     ├── install.sh
     └── verify-install.ps1
-```
-
-## 安装
-
-在本仓库根目录中，运行本地安装脚本：
-
-PowerShell:
-
-```powershell
-.\scripts\install.ps1
-```
-
-macOS/Linux:
-
-```bash
-sh ./scripts/install.sh
-```
-
-安装脚本会替你运行下面这些官方 Codex CLI 命令：
-
-```powershell
-codex plugin marketplace add .
-codex plugin add subagent-dispatcher@codex-subagents-dispatcher
-```
-
-如果你的 Codex 构建以不同方式发现本地插件市场文件，请使用下面命令显示的插件市场名称安装：
-
-```powershell
-codex plugin list
-```
-
-也可以不克隆仓库，直接从 GitHub 安装：
-
-```powershell
-codex plugin marketplace add sc543753481/codex-subagents-dispatcher --ref main
-codex plugin add subagent-dispatcher@codex-subagents-dispatcher
-```
-
-运行安装脚本后，可以用下面命令验证本地安装：
-
-```powershell
-.\scripts\verify-install.ps1
 ```
 
 ## AGENTS.md 常驻授权指令
