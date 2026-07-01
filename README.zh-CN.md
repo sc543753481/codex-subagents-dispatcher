@@ -4,11 +4,36 @@
 
 让 Codex 在可拆分任务中主动考虑子智能体。
 
-## 一行安装
+## 安装
+
+优先推荐：从 Codex app 图形界面安装。
+
+1. 打开 Codex app 的 **Plugins**。
+2. 选择 **Add plugin marketplace**。
+3. 填写：
+
+```text
+Source: sc543753481/codex-subagents-dispatcher
+Git ref: main
+Sparse path: leave empty
+```
+
+4. 打开新增的 marketplace，安装 **Subagent Dispatcher**。
+5. 安装后打开一个新的 Codex 线程，让插件技能加载到会话中。
+
+Codex app 深链接只能在 Codex 已经知道该插件市场之后打开安装流程：
+
+```text
+codex://plugins/install/subagent-dispatcher?marketplace=codex-subagents-dispatcher
+```
+
+首次公开安装，请先用上面的图形界面添加 marketplace；也可以使用安装脚本，或使用下面的 Codex CLI 命令。
+
+### CLI 安装
 
 需要先安装 Codex CLI 并完成登录。
 
-PowerShell:
+PowerShell 一行安装：
 
 ```powershell
 irm https://raw.githubusercontent.com/sc543753481/codex-subagents-dispatcher/main/scripts/install.ps1 | iex
@@ -41,24 +66,6 @@ curl -fsSL https://raw.githubusercontent.com/sc543753481/codex-subagents-dispatc
 ```bash
 curl -fsSL https://raw.githubusercontent.com/sc543753481/codex-subagents-dispatcher/main/scripts/install.sh | env DRY_RUN=1 sh
 ```
-
-安装后打开一个新的 Codex 线程，让插件技能加载到会话中。
-
-如果你更喜欢 Codex app 图形界面，请打开 **Plugins**，选择 **Add plugin marketplace**，然后填写：
-
-```text
-Source: sc543753481/codex-subagents-dispatcher
-Git ref: main
-Sparse path: leave empty
-```
-
-Codex app 深链接只能在 Codex 已经知道该插件市场之后打开安装流程：
-
-```text
-codex://plugins/install/subagent-dispatcher?marketplace=codex-subagents-dispatcher
-```
-
-首次公开安装仍需要使用安装脚本，或使用下面两条 Codex CLI 命令。
 
 ## 概览
 

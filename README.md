@@ -4,11 +4,36 @@
 
 Make Codex actually consider subagents when work can be split.
 
-## One-Line Install
+## Install
+
+Recommended: install from the Codex app UI.
+
+1. Open **Plugins** in the Codex app.
+2. Choose **Add plugin marketplace**.
+3. Fill in:
+
+```text
+Source: sc543753481/codex-subagents-dispatcher
+Git ref: main
+Sparse path: leave empty
+```
+
+4. Open the new marketplace and install **Subagent Dispatcher**.
+5. Open a new Codex thread so the plugin skill is loaded into the session.
+
+Codex app deep links can open the install flow only after Codex already knows the marketplace:
+
+```text
+codex://plugins/install/subagent-dispatcher?marketplace=codex-subagents-dispatcher
+```
+
+For a first-time public install, add the marketplace in the app first, or use the installer or CLI commands below.
+
+### CLI Install
 
 Requires the Codex CLI to be installed and signed in.
 
-PowerShell:
+PowerShell one-line install:
 
 ```powershell
 irm https://raw.githubusercontent.com/sc543753481/codex-subagents-dispatcher/main/scripts/install.ps1 | iex
@@ -41,24 +66,6 @@ To preview the commands before running them:
 ```bash
 curl -fsSL https://raw.githubusercontent.com/sc543753481/codex-subagents-dispatcher/main/scripts/install.sh | env DRY_RUN=1 sh
 ```
-
-Open a new Codex thread after installing so the plugin skill is loaded into the session.
-
-If you prefer the Codex app UI, open **Plugins**, choose **Add plugin marketplace**, and use:
-
-```text
-Source: sc543753481/codex-subagents-dispatcher
-Git ref: main
-Sparse path: leave empty
-```
-
-Codex app deep links can open the install flow only after Codex already knows the marketplace:
-
-```text
-codex://plugins/install/subagent-dispatcher?marketplace=codex-subagents-dispatcher
-```
-
-For a first-time public install, use the installer or the two Codex CLI commands below.
 
 ## Overview
 
