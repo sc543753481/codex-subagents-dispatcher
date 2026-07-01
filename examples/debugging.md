@@ -13,6 +13,8 @@ Expected dispatch:
 - Explorer 3: Inspect skill frontmatter and trigger wording.
 - Explorer 4: Inspect recent logs, cache, or session state if available.
 
+If subagent tooling is unavailable, Codex should state that and run the same four lanes inline before synthesizing.
+
 Expected synthesis:
 
 - State the most likely root cause.
