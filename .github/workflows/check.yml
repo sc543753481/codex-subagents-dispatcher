@@ -1,0 +1,19 @@
+name: Repository check
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run repository check
+        shell: pwsh
+        run: .\scripts\check.ps1

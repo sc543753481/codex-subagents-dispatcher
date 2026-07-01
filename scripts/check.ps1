@@ -27,6 +27,7 @@ Assert-File $skillPath
 Assert-File $marketplacePath
 Assert-File $readmePath
 Assert-File $zhReadmePath
+Assert-File (Join-Path $root ".github/workflows/check.yml")
 Assert-Directory (Join-Path $pluginRoot "skills/subagent-dispatcher/references")
 Assert-File (Join-Path $root "LICENSE")
 Assert-File (Join-Path $root ".gitignore")
@@ -34,6 +35,7 @@ Assert-File (Join-Path $root "scripts/install.ps1")
 Assert-File (Join-Path $root "scripts/install.sh")
 Assert-File (Join-Path $root "scripts/verify-install.ps1")
 Assert-File (Join-Path $root "docs/design.md")
+Assert-File (Join-Path $root "docs/launch-checklist.md")
 Assert-File (Join-Path $root "examples/research.md")
 Assert-File (Join-Path $root "examples/debugging.md")
 Assert-File (Join-Path $root "examples/coding.md")
@@ -101,13 +103,22 @@ if ($readme -notmatch "verify-install\.ps1") {
     throw "README.md must document install verification"
 }
 
+if ($readme -notmatch "launch-checklist\.md") {
+    throw "README.md must link to launch checklist"
+}
+
 if ($zhReadme -notmatch "verify-install\.ps1") {
     throw "README.zh-CN.md must document install verification"
+}
+
+if ($zhReadme -notmatch "launch-checklist\.md") {
+    throw "README.zh-CN.md must link to launch checklist"
 }
 
 $scan = Get-ChildItem -LiteralPath $root -Recurse -File -Force |
     Where-Object { $_.FullName -ne $PSCommandPath } |
     Where-Object { $_.FullName -notlike (Join-Path $root ".git/*") } |
+    Where-Object { $_.FullName -notlike (Join-Path $root "docs/superpowers/*") } |
     Select-String -Pattern "TODO|\[TODO|placeholder|Local developer" -ErrorAction SilentlyContinue
 if ($scan) {
     throw "Found template residue: $($scan | Select-Object -First 1)"

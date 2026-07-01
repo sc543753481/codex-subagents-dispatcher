@@ -2,7 +2,26 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
+[![Repository check](https://github.com/sc543753481/codex-subagents-dispatcher/actions/workflows/check.yml/badge.svg)](https://github.com/sc543753481/codex-subagents-dispatcher/actions/workflows/check.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 Make Codex actually consider subagents when work can be split.
+
+## Why It Exists
+
+Codex subagents are powerful, but Codex often needs explicit permission and clear dispatch rules before it uses them well.
+
+`subagent-dispatcher` gives Codex a reusable workflow for deciding when to split work, how many agents to use, what each agent owns, and how the main agent should synthesize the result.
+
+## Fast Proof
+
+After installing, try this in a project with several independent areas to inspect:
+
+```text
+Use subagent-dispatcher. Inspect this repository with read-only subagents: one for install flow, one for plugin manifest, one for examples/docs, and one for validation gaps. Synthesize the result into priorities.
+```
+
+Expected behavior: Codex should announce the split, keep each agent focused, then return one synthesized answer instead of dumping separate notes.
 
 ## Install
 
@@ -165,6 +184,7 @@ This plugin guides Codex toward a better operating mode for parallel work: main 
 .
 ├── README.md
 ├── README.zh-CN.md
+├── .github/workflows/check.yml
 ├── .agents/plugins/marketplace.json
 ├── plugins/subagent-dispatcher/
 │   ├── .codex-plugin/plugin.json
@@ -174,6 +194,7 @@ This plugin guides Codex toward a better operating mode for parallel work: main 
 │       └── references/
 ├── examples/
 ├── docs/
+│   └── launch-checklist.md
 └── scripts/
     ├── check.ps1
     ├── install.ps1
@@ -210,6 +231,7 @@ If your Codex runtime does not expose subagent tools, a valid fallback is for Co
 - See [examples/research.md](examples/research.md) for multi-source product or tool comparison.
 - See [examples/debugging.md](examples/debugging.md) for config/log/history diagnosis.
 - See [examples/coding.md](examples/coding.md) for independent coding failures and write-scope safety.
+- See [docs/launch-checklist.md](docs/launch-checklist.md) for repository launch and promotion steps.
 
 ## Validation
 
@@ -220,6 +242,8 @@ Run the lightweight repository check:
 ```
 
 This checks required files, manifest consistency, marketplace pointers, standing authorization documentation, one-line installer documentation, language-switch links, and common template leftovers.
+
+The same check runs in GitHub Actions on pushes and pull requests.
 
 Verify that Codex can see the installed plugin:
 

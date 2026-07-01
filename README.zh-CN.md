@@ -2,7 +2,26 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
+[![Repository check](https://github.com/sc543753481/codex-subagents-dispatcher/actions/workflows/check.yml/badge.svg)](https://github.com/sc543753481/codex-subagents-dispatcher/actions/workflows/check.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 让 Codex 在可拆分任务中主动考虑子智能体。
+
+## 为什么需要它
+
+Codex 子智能体很强，但 Codex 通常需要明确授权和清晰的调度规则，才会稳定地使用它们。
+
+`subagent-dispatcher` 给 Codex 提供一套可复用工作流：判断什么时候拆分、用几个智能体、每个智能体负责什么，以及主智能体如何综合结果。
+
+## 快速感受效果
+
+安装后，在一个有多个独立区域可检查的项目里试试：
+
+```text
+Use subagent-dispatcher. Inspect this repository with read-only subagents: one for install flow, one for plugin manifest, one for examples/docs, and one for validation gaps. Synthesize the result into priorities.
+```
+
+预期行为：Codex 应该先说明拆分方式，让每个智能体保持聚焦，然后返回一个综合后的结论，而不是直接堆叠多个子智能体摘要。
 
 ## 安装
 
@@ -165,6 +184,7 @@ codex plugin add subagent-dispatcher@codex-subagents-dispatcher
 .
 ├── README.md
 ├── README.zh-CN.md
+├── .github/workflows/check.yml
 ├── .agents/plugins/marketplace.json
 ├── plugins/subagent-dispatcher/
 │   ├── .codex-plugin/plugin.json
@@ -174,6 +194,7 @@ codex plugin add subagent-dispatcher@codex-subagents-dispatcher
 │       └── references/
 ├── examples/
 ├── docs/
+│   └── launch-checklist.md
 └── scripts/
     ├── check.ps1
     ├── install.ps1
@@ -210,6 +231,7 @@ Use subagent-dispatcher. Inspect this project by splitting the work into read-on
 - 查看 [examples/research.md](examples/research.md)，了解多来源产品或工具比较。
 - 查看 [examples/debugging.md](examples/debugging.md)，了解配置、日志和历史记录诊断。
 - 查看 [examples/coding.md](examples/coding.md)，了解独立编码失败和写入范围安全。
+- 查看 [docs/launch-checklist.md](docs/launch-checklist.md)，了解仓库发布和推广步骤。
 
 ## 校验
 
@@ -220,6 +242,8 @@ Use subagent-dispatcher. Inspect this project by splitting the work into read-on
 ```
 
 它会检查必需文件、清单一致性、插件市场指针、常驻授权指令文档、一行安装文档、语言切换链接和常见模板残留。
+
+同一项检查也会在 GitHub Actions 中对 push 和 pull request 自动运行。
 
 验证 Codex 能否看到已安装插件：
 
