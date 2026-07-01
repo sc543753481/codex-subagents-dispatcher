@@ -1,0 +1,4 @@
+interface:
+  display_name: "Subagent Dispatcher"
+  short_description: "Dispatch focused subagents for parallel work"
+  default_prompt: "Use subagent-dispatcher for this multi-part task."

@@ -1,0 +1,34 @@
+{
+  "name": "subagent-dispatcher",
+  "version": "0.1.0",
+  "description": "General-purpose workflow guidance for dispatching focused Codex subagents on parallelizable work.",
+  "author": {
+    "name": "subagent-dispatcher contributors"
+  },
+  "license": "MIT",
+  "keywords": [
+    "codex",
+    "subagents",
+    "multi-agent",
+    "workflow",
+    "parallel-work"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Subagent Dispatcher",
+    "shortDescription": "Dispatch focused subagents for parallel work.",
+    "longDescription": "Subagent Dispatcher helps Codex decide when to split coding and non-coding work into focused subagents, assign clear scopes, and synthesize the results safely.",
+    "developerName": "subagent-dispatcher contributors",
+    "category": "Productivity",
+    "capabilities": [
+      "Workflow",
+      "Planning",
+      "Parallel Work"
+    ],
+    "defaultPrompt": [
+      "Use subagent-dispatcher for this multi-part task.",
+      "Split this task into focused subagents if useful.",
+      "Plan a parallel subagent investigation."
+    ]
+  }
+}
